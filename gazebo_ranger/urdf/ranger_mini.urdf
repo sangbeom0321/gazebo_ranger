@@ -1,0 +1,803 @@
+<?xml version="1.0" ?>
+
+<robot name="ranger_mini_v2">
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0"/>
+      <mass value="50"/>
+      <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.5 0.0001 0.2"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.784 0.784 0.784 1"/>
+      </material>
+    </visual>
+  </link>
+  <link name="ranger_base">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file:///root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/meshes/ranger_mini_v2/base_link.STL"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.784 0.784 0.784 1"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="base_to_body_joint" type="fixed">
+    <origin rpy="0 0 1.57" xyz="0.2 0.0 -0.1"/>
+    <parent link="base_link"/>
+    <child link="ranger_base"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <link name="lidar_connector_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file:///root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/meshes/ranger_mini_v2/lidar_link.STL"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.314 0.314 0.314 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file:///root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/meshes/ranger_mini_v2/lidar_link.STL"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <origin rpy="1.5708 0 0" xyz="-0.003125 0.020748 0.40825"/>
+    <parent link="ranger_base"/>
+    <child link="lidar_connector_link"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <link name="camera_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file:///root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/meshes/ranger_mini_v2/camera_link.STL"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.314 0.314 0.314 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file:///root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/meshes/ranger_mini_v2/camera_link.STL"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="camer_joint" type="fixed">
+    <origin rpy="1.5708 0 0" xyz="-0.0029998 -0.17935 0.19625"/>
+    <parent link="ranger_base"/>
+    <child link="camera_link"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <link name="imu_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file:///root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/meshes/ranger_mini_v2/imu_link.STL"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.784 0.784 0.784 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file:///root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/meshes/ranger_mini_v2/imu_link.STL"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="imu_joint" type="fixed">
+    <origin rpy="-1.5708 0 -1.5708" xyz="-0.003 0.087717 0.25475"/>
+    <parent link="ranger_base"/>
+    <child link="imu_link"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <link name="fl_steering_wheel_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0"/>
+      <mass value="1"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0 3.14 " xyz="-0.23 -0.194 0.1"/>
+      <geometry>
+        <mesh filename="file:///root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/meshes/ranger_mini_v2/fl.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.008"/>
+      <geometry>
+        <cylinder length="0.001" radius="0.001"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.001" radius="0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="fl_steering_wheel" type="revolute">
+    <origin rpy="0 0 0" xyz="0.23 0.206 -0.1"/>
+    <parent link="base_link"/>
+    <child link="fl_steering_wheel_link"/>
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <limit effort="5" lower="-2.1" upper="2.1" velocity="6.28"/>
+  </joint>
+  <gazebo reference="fl_steering_wheel_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+  <link name="fl_wheel_link">
+    <inertial>
+      <mass value="8"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.1171" ixy="0" ixz="0" iyy="0.1361" iyz="0" izz="0.1171"/>
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file:///root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/meshes/ranger_mini_v2/ffl_wheel_link.STL" scale="1.15 1.15 1.15"/>
+      </geometry>
+      <material name="fl_wheel">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 1.57 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.06" radius="0.105"/>
+      </geometry>
+      <contact>
+        <ode>
+          <min_depth>0.001</min_depth>
+          <mu1>2000</mu1>
+          <mu2>2000</mu2>
+        </ode>
+      </contact>
+    </collision>
+  </link>
+  <gazebo reference="fl_wheel_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+  <joint name="fl_wheel" type="continuous">
+    <origin rpy="0 0 1.57" xyz="0.017 -0.01 -0.12 "/>
+    <parent link="fl_steering_wheel_link"/>
+    <child link="fl_wheel_link"/>
+    <axis rpy="0 0 0" xyz="1 0 0"/>
+  </joint>
+  <link name="fr_steering_wheel_link">
+    <inertial>
+      <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+      <mass value="1"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0 3.14 " xyz="-0.23 0.194 0.1"/>
+      <geometry>
+        <mesh filename="file:///root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/meshes/ranger_mini_v2/fr.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.008"/>
+      <geometry>
+        <cylinder length="0.001" radius="0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="fr_steering_wheel" type="revolute">
+    <origin rpy="0 0 0" xyz="0.23 -0.206 -0.1"/>
+    <parent link="base_link"/>
+    <child link="fr_steering_wheel_link"/>
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <limit effort="5" lower="-2.1" upper="2.1" velocity="6.28"/>
+  </joint>
+  <gazebo reference="fr_steering_wheel_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+  <link name="fr_wheel_link">
+    <inertial>
+      <mass value="8"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.1171" ixy="0" ixz="0" iyy="0.1361" iyz="0" izz="0.1171"/>
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file:///root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/meshes/ranger_mini_v2/ffl_wheel_link.STL" scale="1.15 1.15 1.15"/>
+      </geometry>
+      <material name="fr_wheel">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 1.57 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.06" radius="0.105"/>
+      </geometry>
+      <contact>
+        <ode>
+          <min_depth>0.001</min_depth>
+          <mu1>2000</mu1>
+          <mu2>2000</mu2>
+        </ode>
+      </contact>
+    </collision>
+  </link>
+  <gazebo reference="fr_wheel_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+  <joint name="fr_wheel" type="continuous">
+    <origin rpy="0 0 -1.57" xyz="0.017 0.01 -0.12 "/>
+    <parent link="fr_steering_wheel_link"/>
+    <child link="fr_wheel_link"/>
+    <axis rpy="0 0 0" xyz="-1 0 0"/>
+  </joint>
+  <link name="rl_steering_wheel_link">
+    <inertial>
+      <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+      <mass value="1"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0 3.14 " xyz="-0.23 -0.194 0.1"/>
+      <geometry>
+        <mesh filename="file:///root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/meshes/ranger_mini_v2/fl.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.008"/>
+      <geometry>
+        <cylinder length="0.001" radius="0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="rl_steering_wheel" type="revolute">
+    <origin rpy="0 0 0" xyz="-0.23 0.206 -0.1"/>
+    <parent link="base_link"/>
+    <child link="rl_steering_wheel_link"/>
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <limit effort="5" lower="-2.1" upper="2.1" velocity="6.28"/>
+  </joint>
+  <gazebo reference="rl_steering_wheel_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+  <link name="rl_wheel_link">
+    <inertial>
+      <mass value="8"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.1171" ixy="0" ixz="0" iyy="0.1361" iyz="0" izz="0.1171"/>
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="file:///root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/meshes/ranger_mini_v2/ffl_wheel_link.STL" scale="1.15 1.15 1.15"/>
+      </geometry>
+      <material name="rl_wheel">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 1.57 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.06" radius="0.105"/>
+      </geometry>
+      <contact>
+        <ode>
+          <mu1>2000</mu1>
+          <mu2>2000</mu2>
+          <min_depth>0.001</min_depth>
+        </ode>
+      </contact>
+    </collision>
+  </link>
+  <joint name="rl_wheel" type="continuous">
+    <origin rpy="0 0 1.57" xyz="0.017 -0.01 -0.12 "/>
+    <parent link="rl_steering_wheel_link"/>
+    <child link="rl_wheel_link"/>
+    <axis rpy="0 0 0" xyz="1 0 0"/>
+  </joint>
+  <gazebo reference="rl_wheel_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+  <link name="rr_steering_wheel_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0"/>
+      <mass value="1"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0 3.14 " xyz="-0.23 0.194 0.1"/>
+      <geometry>
+        <mesh filename="file:///root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/meshes/ranger_mini_v2/fr.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.001" radius="0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="rr_steering_wheel" type="revolute">
+    <origin rpy="0 0 0" xyz="-0.23 -0.206 -0.1"/>
+    <parent link="base_link"/>
+    <child link="rr_steering_wheel_link"/>
+    <axis rpy="0 0 0" xyz="0 0 1"/>
+    <limit effort="5" lower="-2.1" upper="2.1" velocity="6.28"/>
+  </joint>
+  <gazebo reference="rr_steering_wheel_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+  <link name="rr_wheel_link">
+    <inertial>
+      <mass value="8"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.1171" ixy="0" ixz="0" iyy="0.1361" iyz="0" izz="0.1171"/>
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0 0" xyz="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file:///root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/meshes/ranger_mini_v2/ffl_wheel_link.STL" scale="1.15 1.15 1.15"/>
+      </geometry>
+      <material name="rr_wheel">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 1.57 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.06" radius="0.105"/>
+      </geometry>
+      <contact>
+        <ode>
+          <min_depth>0.001</min_depth>
+          <mu1>2000</mu1>
+          <mu2>2000</mu2>
+        </ode>
+      </contact>
+    </collision>
+  </link>
+  <gazebo reference="rr_wheel_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+  <joint name="rr_wheel" type="continuous">
+    <origin rpy="0 0 -1.57" xyz="0.017 0.01 -0.12 "/>
+    <parent link="rr_steering_wheel_link"/>
+    <child link="rr_wheel_link"/>
+    <axis rpy="0 0 0" xyz="-1 0 0"/>
+  </joint>
+  <transmission name="fl_steering_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="fl_steering_wheel">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="fl_steering_wheel_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>30</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="fr_steering_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="fr_steering_wheel">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="fr_steering_wheel_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>30</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="rl_steering_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="rl_steering_wheel">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="rl_steering_wheel_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>30</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="rr_steering_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="rr_steering_wheel">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="rr_steering_wheel_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>30</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="fl_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="fl_wheel">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="fl_wheel_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>30</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="fr_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="fr_wheel">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="fr_wheel_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>30</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="rl_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="rl_wheel">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="rl_wheel_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>30</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="rr_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="rr_wheel">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="rr_wheel_motor">
+      <hardwareInterface>hardware_interface/PositionJoVelocityJointInterfaceintInterface</hardwareInterface>
+      <mechanicalReduction>30</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <gazebo>
+    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+      <parameters>/root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/config/controller.yaml</parameters>
+    </plugin>
+  </gazebo>
+  <ros2_control name="GazeboSystem" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+    <joint name="fl_wheel">
+      <command_interface name="velocity">
+        <param name="min">-3.14</param>
+        <param name="max">3.14</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="fr_wheel">
+      <command_interface name="velocity">
+        <param name="min">-3.14</param>
+        <param name="max">3.14</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="rl_wheel">
+      <command_interface name="velocity">
+        <param name="min">-3.14</param>
+        <param name="max">3.14</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="rr_wheel">
+      <command_interface name="velocity">
+        <param name="min">-3.14</param>
+        <param name="max">3.14</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="fl_steering_wheel">
+      <command_interface name="position">
+        <param name="min">-3.14</param>
+        <param name="max">3.14</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="fr_steering_wheel">
+      <command_interface name="position">
+        <param name="min">-3.14</param>
+        <param name="max">3.14</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="rl_steering_wheel">
+      <command_interface name="position">
+        <param name="min">-3.14</param>
+        <param name="max">3.14</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="rr_steering_wheel">
+      <command_interface name="position">
+        <param name="min">-3.14</param>
+        <param name="max">3.14</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+  </ros2_control>
+  <!-- MACRO -->
+  <joint name="ouster_base_mount_joint" type="fixed">
+    <origin rpy="-1.57 -1.57 0.0" xyz="0 0 0"/>
+    <parent link="lidar_connector_link"/>
+    <child link="ouster_base_link"/>
+  </joint>
+  <link name="ouster_base_link">
+    </link>
+  <joint name="ouster_base_scan_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 -0.4"/>
+    <parent link="ouster_base_link"/>
+    <child link="ouster"/>
+  </joint>
+  <link name="ouster">
+    </link>
+  <!-- Gazebo requires the velodyne_gazebo_plugins package -->
+  <gazebo reference="ouster">
+    <sensor name="ouster-VLP16" type="ray">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>512</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.141592653589793</min_angle>
+            <max_angle>3.141592653589793</max_angle>
+          </horizontal>
+          <vertical>
+            <samples>32</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.2617993877991494</min_angle>
+            <max_angle> 0.2617993877991494</max_angle>
+          </vertical>
+        </scan>
+        <range>
+          <min>0.3</min>
+          <max>131.0</max>
+          <resolution>0.001</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.0</stddev>
+        </noise>
+      </ray>
+      <plugin filename="libgazebo_ros_velodyne_laser.so" name="velodyne_plugin">
+        <ros>
+          <namespace>/</namespace>
+          <remapping>~/out:=/points</remapping>
+        </ros>
+        <topic_name>/points</topic_name>
+        <frame_name>ouster</frame_name>
+        <min_range>0.9</min_range>
+        <max_range>130.0</max_range>
+        <gaussianNoise>0.008</gaussianNoise>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <!-- KINECT CAMERA -->
+  <link name="kinect_camera"/>
+  <joint name="kinect_camera_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.37911 -0.0031858 0.1"/>
+    <parent link="base_link"/>
+    <child link="kinect_camera"/>
+  </joint>
+  <link name="kinect_camera_optical"/>
+  <joint name="kinect_camera_optical_joint" type="fixed">
+    <origin rpy="-1.5707963267948966 0 -1.5707963267948966" xyz="0 0 0"/>
+    <parent link="kinect_camera"/>
+    <child link="kinect_camera_optical"/>
+  </joint>
+  <gazebo reference="kinect_camera">
+    <sensor name="kinect_camera" type="depth">
+      <pose> 0 0 0 0 0 0 </pose>
+      <visualize>true</visualize>
+      <update_rate>30</update_rate>
+      <camera>
+        <horizontal_fov>1.089</horizontal_fov>
+        <image>
+          <format>R8G8B8</format>
+          <width>640</width>
+          <height>480</height>
+        </image>
+        <clip>
+          <near>0.2</near>
+          <far>10.0</far>
+        </clip>
+      </camera>
+      <plugin filename="libgazebo_ros_camera.so" name="camera_controller">
+        <ros>
+          <namespace>/</namespace>
+        </ros>
+        <frame_name>kinect_camera_optical</frame_name>
+        <min_depth>0.1</min_depth>
+        <max_depth>100.0</max_depth>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <!-- IMU -->
+  <link name="imu"/>
+  <joint name="imu_joint_sensor" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="imu"/>
+  </joint>
+  <gazebo reference="imu">
+    <gravity>true</gravity>
+    <sensor name="imu" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>/imu</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <ros>
+          <namespace>/</namespace>
+          <remapping>~/out:=/imu</remapping>
+        </ros>
+        <topicName>/imu</topicName>
+        <body_name>imu</body_name>
+        <frame_name>ouster</frame_name>
+        <updateRateHZ>100</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0.0 0.0 0.0</xyzOffset>
+        <rpyOffset>0.0 0.0 0.0</rpyOffset>
+        <initialOrientationAsReference>true</initialOrientationAsReference>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+  </gazebo>
+  <!-- GPS -->
+  <link name="gps_link_connect">
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.000 0.000 0.00"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.79216 0.81961 0.93333 1"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="1e-5"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+  <joint name="gps_joint_connect" type="fixed">
+    <axis xyz="0 1 0"/>
+    <origin rpy="0 0 0" xyz="0.3 0 0"/>
+    <parent link="base_link"/>
+    <child link="gps_link_connect"/>
+  </joint>
+  <gazebo reference="gps_link_connect">
+    <sensor name="gps" type="gps">
+      <always_on>true</always_on>
+      <update_rate>10</update_rate>
+      <pose>0 0 0 0 0 0</pose>
+      <gps>
+        <position_sensing>
+          <horizontal>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.0</stddev>
+            </noise>
+          </horizontal>
+          <vertical>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.0</stddev>
+            </noise>
+          </vertical>
+        </position_sensing>
+      </gps>
+      <plugin filename="libgazebo_ros_gps_sensor.so" name="gps">
+        <ros>
+          <remapping>~/out:=gps/fix2</remapping>
+        </ros>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <!-- GPS2 -->
+  <link name="gps2_link_connect">
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.000 0.000 0.00"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.79216 0.81961 0.93333 1"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="1e-5"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+  <joint name="gps2_joint_connect" type="fixed">
+    <axis xyz="0 1 0"/>
+    <origin rpy="0 0 0" xyz="-0.3 0 0"/>
+    <parent link="base_link"/>
+    <child link="gps2_link_connect"/>
+  </joint>
+  <gazebo reference="gps2_link_connect">
+    <sensor name="gps2" type="gps">
+      <always_on>true</always_on>
+      <update_rate>10</update_rate>
+      <pose>0 0 0 0 0 0</pose>
+      <gps>
+        <position_sensing>
+          <horizontal>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.0</stddev>
+            </noise>
+          </horizontal>
+          <vertical>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.0</stddev>
+            </noise>
+          </vertical>
+        </position_sensing>
+      </gps>
+      <plugin filename="libgazebo_ros_gps_sensor.so" name="gps2">
+        <ros>
+          <remapping>~/out:=gps/fix</remapping>
+        </ros>
+      </plugin>
+    </sensor>
+  </gazebo>
+</robot>

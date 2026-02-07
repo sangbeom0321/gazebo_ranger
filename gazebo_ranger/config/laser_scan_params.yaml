@@ -1,0 +1,27 @@
+# PointCloud to LaserScan 변환 노드 파라미터 설정
+
+# ========== 토픽 설정 ==========
+pcd_topic: "/points"          # 입력 포인트클라우드 토픽
+scan_topic: "/scan"           # 출력 LaserScan 토픽
+imu_topic: "/imu"             # IMU 토픽 (기울기 보정용)
+
+# ========== Z축 클리핑 범위 (미터) ==========
+# 로봇이 기울어질 때 동적으로 조정됨
+clipping_minz: -0.2           # 최소 Z값 (미터)
+clipping_maxz: 0.4            # 최대 Z값 (미터)
+
+# ========== LaserScan 설정 ==========
+scan_frame_id: "laser_data_frame"  # LaserScan 프레임 ID
+
+# 각도 설정 (라디안)
+angle_min: -3.14159          # 최소 각도 (-180도)
+angle_max: 3.14159           # 최대 각도 (180도)
+angle_increment: 0.0174533   # 각도 간격 (1도 = π/180)
+
+# 거리 설정 (미터)
+range_min: 0.5               # 최소 거리
+range_max: 200.0             # 최대 거리
+
+# ========== 포인트클라우드 필터링 설정 ==========
+radius_search: 0.3           # Radius Outlier Removal 반경 (미터)
+min_neighbors_in_radius: 3   # 최소 이웃 포인트 개수

@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="gps"> 
+    <xacro:property name="M_PI" value="3.1415926535897931" />
+
+    <xacro:macro name="gps" params="path:='$(find gazebo_ranger)/config/sensor_params.yaml'">
+
+    <!-- Extracting values from the params -->
+    <xacro:property name="yaml_path" value="$(find gazebo_ranger)/config/sensor_params.yaml" />
+    <xacro:property name="dict_yaml" value="${xacro.load_yaml(yaml_path)}" />
+    <xacro:property name="gps" value="${dict_yaml['gps']}" />
+    <xacro:property name="name" value="${gps['name']}" />
+    <xacro:property name="parent" value="${gps['parent']}" />
+    <xacro:property name="hz" value="${gps['hz']}" />
+    <xacro:property name="topic" value="${gps['topic']}" />
+    <xacro:property name="horizontal_mean" value="${gps['horizontal_mean']}" />
+    <xacro:property name="horizontal_stddev" value="${gps['horizontal_stddev']}" />
+    <xacro:property name="vertical_mean" value="${gps['vertical_mean']}" />
+    <xacro:property name="vertical_stddev" value="${gps['vertical_stddev']}" />
+
+    <!-- GPS -->
+
+    <link name="gps_link_connect">
+        <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+        <box size="0.000 0.000 0.00"/>
+        </geometry>
+        </collision>
+
+        <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+        <box size="0.001 0.001 0.001"/>
+        </geometry>
+        <material
+            name="">
+            <color
+            rgba="0.79216 0.81961 0.93333 1" />
+        </material>
+        </visual>
+
+        <inertial>
+        <mass value="1e-5" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+        </inertial>
+    </link>
+
+    <joint name="gps_joint_connect" type="fixed">
+        <axis xyz="0 1 0" />
+        <origin xyz="0.3 0 0" rpy="0 0 0"/>
+        <parent link="${parent}"/>
+        <child link="gps_link_connect"/>
+    </joint>
+
+    <gazebo reference="gps_link_connect">
+        <sensor name="${name}" type="gps">
+        <always_on>true</always_on>
+        <update_rate>${hz}</update_rate>
+        <pose>0 0 0 0 0 0</pose>
+        <gps>
+            <position_sensing>
+            <horizontal>
+                <noise type="gaussian">
+                <mean>${horizontal_mean}</mean>
+                <stddev>${horizontal_stddev}</stddev>
+                </noise>
+            </horizontal>
+            <vertical>
+                <noise type="gaussian">
+                <mean>${vertical_mean}</mean>
+                <stddev>${vertical_stddev}</stddev>
+                </noise>
+            </vertical>
+            </position_sensing>
+        </gps>
+        <plugin name="gps" filename="libgazebo_ros_gps_sensor.so">
+            <ros>
+            <remapping>~/out:=${topic}2</remapping>
+            </ros>
+        </plugin>
+        </sensor>
+    </gazebo>
+
+    <!-- GPS2 -->
+
+    <link name="gps2_link_connect">
+        <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+        <box size="0.000 0.000 0.00"/>
+        </geometry>
+        </collision>
+
+        <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+        <box size="0.001 0.001 0.001"/>
+        </geometry>
+        <material
+            name="">
+            <color
+            rgba="0.79216 0.81961 0.93333 1" />
+        </material>
+        </visual>
+
+        <inertial>
+        <mass value="1e-5" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+        </inertial>
+    </link>
+
+    <joint name="gps2_joint_connect" type="fixed">
+        <axis xyz="0 1 0" />
+        <origin xyz="-0.3 0 0" rpy="0 0 0"/>
+        <parent link="${parent}"/>
+        <child link="gps2_link_connect"/>
+    </joint>
+
+    <gazebo reference="gps2_link_connect">
+        <sensor name="${name}2" type="gps">
+        <always_on>true</always_on>
+        <update_rate>${hz}</update_rate>
+        <pose>0 0 0 0 0 0</pose>
+        <gps>
+            <position_sensing>
+            <horizontal>
+                <noise type="gaussian">
+                <mean>${horizontal_mean}</mean>
+                <stddev>${horizontal_stddev}</stddev>
+                </noise>
+            </horizontal>
+            <vertical>
+                <noise type="gaussian">
+                <mean>${vertical_mean}</mean>
+                <stddev>${vertical_stddev}</stddev>
+                </noise>
+            </vertical>
+            </position_sensing>
+        </gps>
+        <plugin name="gps2" filename="libgazebo_ros_gps_sensor.so">
+            <ros>
+            <remapping>~/out:=${topic}</remapping>
+            </ros>
+        </plugin>
+        </sensor>
+    </gazebo>
+  </xacro:macro>
+</robot>

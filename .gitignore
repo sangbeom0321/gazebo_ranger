@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+
+# ROS
+devel/
+logs/
+install/
+build_isolated/
+devel_isolated/
+*.bag
+CATKIN_IGNORE
+
+# Misc
+.vscode/
+*.swp
+log/

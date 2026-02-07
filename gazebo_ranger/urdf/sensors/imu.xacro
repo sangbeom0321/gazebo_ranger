@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="imu"> 
+    <xacro:property name="M_PI" value="3.1415926535897931" />
+
+    <xacro:macro name="imu" params="path:='$(find gazebo_ranger)/config/sensor_params.yaml'">
+
+    <!-- Extracting values from the params -->
+    <xacro:property name="yaml_path" value="$(find gazebo_ranger)/config/sensor_params.yaml" />
+    <xacro:property name="dict_yaml" value="${xacro.load_yaml(yaml_path)}" />
+    <xacro:property name="imu" value="${dict_yaml['imu']}" />
+    <xacro:property name="name" value="${imu['name']}" />
+    <xacro:property name="parent" value="${imu['parent']}" />
+    <xacro:property name="hz" value="${imu['hz']}" />
+    <xacro:property name="updatehz" value="${imu['updatehz']}" />
+    <xacro:property name="topic" value="${imu['topic']}" />
+    <xacro:property name="xOffset" value="${imu['xOffset']}" />
+    <xacro:property name="yOffset" value="${imu['yOffset']}" />
+    <xacro:property name="zOffset" value="${imu['zOffset']}" />
+    <xacro:property name="rollOffset" value="${imu['rollOffset']}" />
+    <xacro:property name="pitchOffset" value="${imu['pitchOffset']}" />
+    <xacro:property name="yawOffset" value="${imu['yawOffset']}" />
+    <xacro:property name="frame_id" value="${imu['frame_id']}" />
+    <xacro:property name="gaussianNoise" value="${imu['gaussianNoise']}" />
+
+    <!-- IMU -->
+    <link name="${name}"/>
+
+    <joint name="${name}_joint_sensor" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="${name}"/>
+    </joint>
+
+    <gazebo reference="${name}">
+        <gravity>true</gravity>
+        <sensor name="${name}" type="imu">
+        <always_on>true</always_on>
+        <update_rate>${hz}</update_rate>
+        <visualize>true</visualize>
+        <topic>${topic}</topic>
+        <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+            <ros>
+              <namespace>/</namespace>
+              <remapping>~/out:=${topic}</remapping>
+            </ros>
+            <topicName>${topic}</topicName>
+            <body_name>${name}</body_name>
+            <frame_name>${frame_id}</frame_name>
+            <updateRateHZ>${hz}</updateRateHZ>
+            <gaussianNoise>0.0</gaussianNoise>
+            <xyzOffset>${xOffset} ${yOffset} ${zOffset}</xyzOffset>
+            <rpyOffset>${rollOffset} ${pitchOffset} ${yawOffset}</rpyOffset>
+            <initialOrientationAsReference>true</initialOrientationAsReference>
+        </plugin>
+        <pose>0 0 0 0 0 0</pose>
+        </sensor>
+    </gazebo>
+  </xacro:macro>
+</robot>
