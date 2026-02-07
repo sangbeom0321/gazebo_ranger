@@ -54,6 +54,18 @@ def generate_launch_description():
             '-z', '0.5'
         ]
     )
+
+    spawn_aruco = Node(
+        package='gazebo_ros',
+        executable='spawn_entity.py',
+        arguments=[
+            '-entity', 'aruco_box',
+            '-file', aruco_model,
+            '-x', '3.0',
+            '-y', '0.0',
+            '-z', '0.0'
+        ]
+    )
     
     # Load controllers
     forward_position_controller = ExecuteProcess(
@@ -143,6 +155,7 @@ def generate_launch_description():
         gazebo,
         robot_state_publisher,
         spawn_ranger,
+        spawn_aruco,
         forward_position_controller,
         forward_velocity_controller,
         joint_state_broadcaster,
