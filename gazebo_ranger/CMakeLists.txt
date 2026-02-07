@@ -94,6 +94,8 @@ install(PROGRAMS
     scripts/box_keyboard_controller.py
     scripts/marker_based_localizer.py
     scripts/fake_local_path.py
+    scripts/set_camera_pose.py
+    scripts/generate_aruco_box_sdf.py
     DESTINATION lib/${PROJECT_NAME}
 )
 

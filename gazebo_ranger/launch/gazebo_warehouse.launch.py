@@ -33,7 +33,10 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             join(get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')
         ),
-        launch_arguments={'world': world}.items()
+        launch_arguments={
+            'world': world,
+            'gui': 'true',
+        }.items()
     )
 
     robot_state_publisher = Node(
@@ -135,6 +138,9 @@ def generate_launch_description():
         }],
         output='screen'
     )
+
+    # Camera pose is now set in the world file (aws_robomaker_small_warehouse_world.world)
+    # No need for additional camera pose setting script
 
     return LaunchDescription([
         DeclareLaunchArgument('use_sim_time', default_value='true'),

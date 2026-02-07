@@ -1,9 +1,9 @@
 <?xml version='1.0'?>
 <sdf version='1.6'>
   <model name='aruco_box'>
-    <!-- Spawn height set via initial pose -->
-    <pose>0 0 3.0 0 0 0</pose>
-    <static>false</static>
+    <!-- Pose will be set via spawn_entity.py arguments -->
+    <!-- static=true: 중력 영향 없이 고정된 위치에 유지 -->
+    <static>true</static>
 
     <link name='box_link'>
       <gravity>false</gravity>
@@ -24,7 +24,7 @@
       <visual name='box_visual'>
         <geometry>
           <box>
-            <size>1.0 1.0 0.5</size>
+            <size>0.35 0.35 0.5</size>
           </box>
         </geometry>
         <material>
@@ -39,14 +39,14 @@
       <collision name='box_collision'>
         <geometry>
           <box>
-            <size>1.0 1.0 0.5</size>
+            <size>0.35 0.35 0.5</size>
           </box>
         </geometry>
       </collision>
 
       <!-- ArUco marker on -X face -->
       <visual name='marker_aruco_neg_x'>
-        <pose>-0.501 0 0 0 0 0</pose>
+        <pose>-0.176 0 0 0 0 0</pose>
         <geometry>
           <box>
             <size>0.003 0.30 0.30</size>

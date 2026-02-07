@@ -33,7 +33,10 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             join(get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')
         ),
-        launch_arguments={'world': world}.items()
+        launch_arguments={
+            'world': world,
+            'gui': 'true',
+        }.items()
     )
 
     robot_state_publisher = Node(
@@ -52,18 +55,6 @@ def generate_launch_description():
             '-x', '0.0',
             '-y', '0.0',
             '-z', '0.5'
-        ]
-    )
-
-    spawn_aruco = Node(
-        package='gazebo_ros',
-        executable='spawn_entity.py',
-        arguments=[
-            '-entity', 'aruco_box',
-            '-file', aruco_model,
-            '-x', '3.0',
-            '-y', '0.0',
-            '-z', '0.0'
         ]
     )
     
@@ -148,6 +139,9 @@ def generate_launch_description():
         output='screen'
     )
 
+    # Camera pose is now set in the world file (empty.sdf)
+    # No need for additional camera pose setting script
+
     return LaunchDescription([
         DeclareLaunchArgument('use_sim_time', default_value='true'),
         DeclareLaunchArgument('world', default_value=world_default),
@@ -155,7 +149,6 @@ def generate_launch_description():
         gazebo,
         robot_state_publisher,
         spawn_ranger,
-        spawn_aruco,
         forward_position_controller,
         forward_velocity_controller,
         joint_state_broadcaster,
