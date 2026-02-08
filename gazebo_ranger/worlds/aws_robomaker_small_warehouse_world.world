@@ -2089,7 +2089,7 @@
       </link>
       <static>0</static>
       <plugin name='gazebo_ros2_control' filename='libgazebo_ros2_control.so'>
-        <parameters>/root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/config/controller.yaml</parameters>
+        <parameters>/root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/config/config.yaml</parameters>
       </plugin>
       <pose>0 0 0.5 0 0 -1.5708</pose>
     </model>

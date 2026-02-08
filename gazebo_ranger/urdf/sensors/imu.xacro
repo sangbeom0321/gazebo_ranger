@@ -2,10 +2,10 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="imu"> 
     <xacro:property name="M_PI" value="3.1415926535897931" />
 
-    <xacro:macro name="imu" params="path:='$(find gazebo_ranger)/config/sensor_params.yaml'">
+    <xacro:macro name="imu" params="path:='$(find gazebo_ranger)/config/config.yaml'">
 
     <!-- Extracting values from the params -->
-    <xacro:property name="yaml_path" value="$(find gazebo_ranger)/config/sensor_params.yaml" />
+    <xacro:property name="yaml_path" value="$(find gazebo_ranger)/config/config.yaml" />
     <xacro:property name="dict_yaml" value="${xacro.load_yaml(yaml_path)}" />
     <xacro:property name="imu" value="${dict_yaml['imu']}" />
     <xacro:property name="name" value="${imu['name']}" />

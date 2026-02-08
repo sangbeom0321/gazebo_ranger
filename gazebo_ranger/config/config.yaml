@@ -1,0 +1,132 @@
+# Gazebo Ranger 통합 설정 파일
+
+# ========== Controller 설정 ==========
+controller_manager:
+  ros__parameters:
+    update_rate: 1000  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    forward_position_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    forward_velocity_controller:
+      type: forward_command_controller/ForwardCommandController
+
+forward_position_controller:
+  ros__parameters:
+    joints:
+      - fl_steering_wheel
+      - fr_steering_wheel
+      - rl_steering_wheel
+      - rr_steering_wheel
+    interface_name: position
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+
+forward_velocity_controller:
+  ros__parameters:
+    joints:
+      - fl_wheel
+      - fr_wheel
+      - rl_wheel
+      - rr_wheel
+    interface_name: velocity
+    command_interfaces:
+      - velocity
+    state_interfaces:
+      - position
+      - velocity
+
+# ========== Sensor 설정 ==========
+camera:
+  name: kinect_camera # topic
+  parent: base_link
+  hz: 30
+  horizontal_fov: 1.089
+  depth_min: 0.1
+  depth_max: 100.0
+  image_width: 640
+  image_height: 480
+  clip_near: 0.2
+  clip_far: 10.0
+  xyz: [0.37911, -0.0031858, 0.1]
+  rpy: [0.0, 0.0, 0.0]
+
+lidar:
+  name: ouster
+  parent: lidar_connector_link
+  topic: /points
+  frame_id: ouster
+  hz: 10
+  lasers: 32
+  samples: 512
+  collision_range: 0.3
+  min_range: 0.9
+  max_range: 130.0
+  noise: 0.008
+  min_angle: -3.1415926535897931
+  max_angle: 3.1415926535897931
+  gpu: false
+
+imu:
+  name: imu
+  parent: base_link
+  topic: /imu
+  frame_id: ouster
+  hz: 100
+  updatehz: 100
+
+  xOffset: 0.0
+  yOffset: 0.0
+  zOffset: 0.0
+
+  rollOffset: 0.0
+  pitchOffset: 0.0
+  yawOffset: 0.0
+  gaussianNoise: 0.0
+
+gps:
+  name: gps
+  parent: base_link
+  topic: gps/fix
+  hz: 10
+
+  # gaussian noise
+  horizontal_mean: 0.0
+  horizontal_stddev: 0.0
+  vertical_mean: 0.0
+  vertical_stddev: 0.0
+
+# ========== LaserScan 설정 ==========
+# PointCloud to LaserScan 변환 노드 파라미터 설정
+
+# 토픽 설정
+pcd_topic: "/points"          # 입력 포인트클라우드 토픽
+scan_topic: "/scan"           # 출력 LaserScan 토픽
+imu_topic: "/imu"             # IMU 토픽 (기울기 보정용)
+
+# Z축 클리핑 범위 (미터)
+# 로봇이 기울어질 때 동적으로 조정됨
+clipping_minz: -0.2           # 최소 Z값 (미터)
+clipping_maxz: 0.4            # 최대 Z값 (미터)
+
+# LaserScan 설정
+scan_frame_id: "laser_data_frame"  # LaserScan 프레임 ID
+
+# 각도 설정 (라디안)
+angle_min: -3.14159          # 최소 각도 (-180도)
+angle_max: 3.14159           # 최대 각도 (180도)
+angle_increment: 0.0174533   # 각도 간격 (1도 = π/180)
+
+# 거리 설정 (미터)
+range_min: 0.5               # 최소 거리
+range_max: 200.0             # 최대 거리
+
+# 포인트클라우드 필터링 설정
+radius_search: 0.3           # Radius Outlier Removal 반경 (미터)
+min_neighbors_in_radius: 3   # 최소 이웃 포인트 개수

@@ -5,7 +5,7 @@
   <xacro:macro name="kinect_camera" params="camera_key:='camera'">
 
     <!-- Extracting values from the params -->
-    <xacro:property name="yaml_path" value="$(find gazebo_ranger)/config/sensor_params.yaml" />
+    <xacro:property name="yaml_path" value="$(find gazebo_ranger)/config/config.yaml" />
     <xacro:property name="dict_yaml" value="${xacro.load_yaml(yaml_path)}" />
     <xacro:property name="camera" value="${dict_yaml[camera_key]}" />
     <xacro:property name="name" value="${camera['name']}" />

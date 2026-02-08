@@ -33,7 +33,8 @@ setup(
             'path_publisher = scripts.path_debug.path_publisher:main',
             'local_path_publisher = scripts.path_debug.local_path_publisher:main',
             'base_link_state = scripts.base_link_state:main',
-            'box_keyboard_controller = scripts.box_keyboard_controller:main'
+            'box_keyboard_controller = scripts.box_keyboard_controller:main',
+            'wheel_odometry = scripts.wheel_odometry:main'
         ],
     },
 )

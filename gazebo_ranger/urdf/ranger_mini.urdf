@@ -459,7 +459,7 @@
   </transmission>
   <gazebo>
     <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-      <parameters>/root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/config/controller.yaml</parameters>
+      <parameters>/root/ros2_ws/install/gazebo_ranger/share/gazebo_ranger/config/config.yaml</parameters>
     </plugin>
   </gazebo>
   <ros2_control name="GazeboSystem" type="system">

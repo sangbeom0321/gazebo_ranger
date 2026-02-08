@@ -16,9 +16,10 @@ class Commander(Node):
     def __init__(self):
         super().__init__('commander')
         timer_period = 0.02
-        self.wheel_seperation = 0.37
-        self.wheel_base = 0.5
-        self.wheel_radius = 0.1
+        # Robot parameters (from URDF)
+        self.wheel_seperation = 0.58306  # track width (m)
+        self.wheel_base = 0.498  # wheelbase (m)
+        self.wheel_radius = 0.16459  # wheel radius (m)
         self.wheel_steering_y_offset = 0.00
         self.steering_track = self.wheel_seperation - 2*self.wheel_steering_y_offset
         self.pi = 3.14159265359
@@ -35,8 +36,8 @@ class Commander(Node):
         
 
     def cmd_callback(self, msg):
-        vel_msg.linear.x = msg.linear.x *3.0
-        vel_msg.linear.y = msg.linear.y *3.0
+        vel_msg.linear.x = msg.linear.x
+        vel_msg.linear.y = msg.linear.y
         vel_msg.angular.z = -msg.angular.z
         
     def timer_callback(self):
@@ -54,10 +55,17 @@ class Commander(Node):
             vel_steerring_offset = vel_msg.angular.z * self.wheel_steering_y_offset
             sign = np.sign(vel_msg.linear.x)
 
-            self.vel[0] = sign*math.hypot(vel_msg.linear.x - vel_msg.angular.z*self.steering_track/2, vel_msg.angular.z*self.wheel_base/2) - vel_steerring_offset
-            self.vel[1] = sign*math.hypot(vel_msg.linear.x + vel_msg.angular.z*self.steering_track/2, vel_msg.angular.z*self.wheel_base/2) + vel_steerring_offset
-            self.vel[2] = sign*math.hypot(vel_msg.linear.x - vel_msg.angular.z*self.steering_track/2, vel_msg.angular.z*self.wheel_base/2) - vel_steerring_offset
-            self.vel[3] = sign*math.hypot(vel_msg.linear.x + vel_msg.angular.z*self.steering_track/2, vel_msg.angular.z*self.wheel_base/2) + vel_steerring_offset
+            # Calculate linear velocities (m/s)
+            fl_linear = sign*math.hypot(vel_msg.linear.x - vel_msg.angular.z*self.steering_track/2, vel_msg.angular.z*self.wheel_base/2) - vel_steerring_offset
+            fr_linear = sign*math.hypot(vel_msg.linear.x + vel_msg.angular.z*self.steering_track/2, vel_msg.angular.z*self.wheel_base/2) + vel_steerring_offset
+            rl_linear = sign*math.hypot(vel_msg.linear.x - vel_msg.angular.z*self.steering_track/2, vel_msg.angular.z*self.wheel_base/2) - vel_steerring_offset
+            rr_linear = sign*math.hypot(vel_msg.linear.x + vel_msg.angular.z*self.steering_track/2, vel_msg.angular.z*self.wheel_base/2) + vel_steerring_offset
+            
+            # Convert to angular velocities (rad/s) = linear_velocity / wheel_radius
+            self.vel[0] = fl_linear / self.wheel_radius
+            self.vel[1] = fr_linear / self.wheel_radius
+            self.vel[2] = rl_linear / self.wheel_radius
+            self.vel[3] = rr_linear / self.wheel_radius
 
             self.pos[0] = -math.atan(vel_msg.angular.z*self.wheel_base/(2*vel_msg.linear.x + vel_msg.angular.z*self.steering_track))
             self.pos[1] = -math.atan(vel_msg.angular.z*self.wheel_base/(2*vel_msg.linear.x - vel_msg.angular.z*self.steering_track))
@@ -89,6 +97,7 @@ class Commander(Node):
                     self.pos[2] = self.pos[0]
                     self.pos[3] = self.pos[1]
                     
+                    # Convert max_speed (rad/s) to wheel angular velocity
                     self.vel[:] = self.max_speed
                 else:
                     self.pos[0] = -self.pi / 2.0
@@ -96,9 +105,11 @@ class Commander(Node):
                     self.pos[2] = self.pos[0]
                     self.pos[3] = self.pos[1]
                     
+                    # Convert max_speed (rad/s) to wheel angular velocity
                     self.vel[:] = self.max_speed
             else:
-                self.vel[:] = sign*V
+                # Convert linear velocity (m/s) to angular velocity (rad/s)
+                self.vel[:] = sign*V / self.wheel_radius
             
             
         # pivot turn
@@ -109,8 +120,15 @@ class Commander(Node):
             self.pos[2] = math.atan(self.steering_track/self.wheel_base)
             self.pos[3] = -math.atan(self.steering_track/self.wheel_base)
             
-            self.vel[0] = vel_msg.angular.z 
-            self.vel[1] = -vel_msg.angular.z 
+            # For pivot turn, angular.z is already in rad/s
+            # But we need to convert to wheel angular velocity
+            # The wheel linear velocity = angular.z * track/2
+            # Wheel angular velocity = (angular.z * track/2) / wheel_radius
+            wheel_linear_vel = abs(vel_msg.angular.z) * self.steering_track / 2.0
+            wheel_angular_vel = wheel_linear_vel / self.wheel_radius
+            
+            self.vel[0] = wheel_angular_vel * np.sign(vel_msg.angular.z)
+            self.vel[1] = -wheel_angular_vel * np.sign(vel_msg.angular.z)
             self.vel[2] = self.vel[0]
             self.vel[3] = self.vel[1]
 

@@ -79,35 +79,6 @@ def generate_launch_description():
         output='screen'
     )
 
-    # You have to turn on this node, when you want to control
-    ranger_controller = Node(
-        package='gazebo_ranger',
-        executable='ranger_controller.py',
-        name='commander',
-        output='screen'
-    )
-
-    utm_pub = Node(
-        package='gazebo_ranger',
-        executable='utm_publisher.py',
-        name='commander',
-        output='screen'
-    )
-
-    fake_local_path = Node(
-        package='gazebo_ranger',
-        executable='fake_local_path.py',
-        name='commander',
-        output='screen'
-    )
-
-    state_machine = Node(
-        package='gazebo_ranger',
-        executable='state_machine',
-        name='commander',
-        output='screen'
-    )
-
     rviz_config = join(pkg_share, 'rviz', 'rviz_setup.rviz')
     rviz_node = Node(
         package='rviz2',
@@ -139,6 +110,15 @@ def generate_launch_description():
         output='screen'
     )
 
+    # Wheel Odometry publisher
+    wheel_odometry_node = Node(
+        package='gazebo_ranger',
+        executable='wheel_odometry.py',
+        name='wheel_odometry',
+        parameters=[{'use_sim_time': use_sim_time}],
+        output='screen'
+    )
+
     # Camera pose is now set in the world file (aws_robomaker_small_warehouse_world.world)
     # No need for additional camera pose setting script
 
@@ -153,12 +133,9 @@ def generate_launch_description():
         forward_velocity_controller,
         joint_state_broadcaster,
         ranger_controller_key,
-        # ranger_controller,
-        utm_pub,
-        fake_local_path,
-        state_machine,
         # rviz_node,
-        laser_scan_node
+        laser_scan_node,
+        # wheel_odometry_node
     ])
 
 

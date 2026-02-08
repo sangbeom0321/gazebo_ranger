@@ -3,7 +3,7 @@
   <xacro:property name="M_PI" value="3.1415926535897931" />
   <xacro:macro name="VLP-32" params="*origin">
 
-  <xacro:property name="yaml_path" value="$(find gazebo_ranger)/config/sensor_params.yaml" />
+  <xacro:property name="yaml_path" value="$(find gazebo_ranger)/config/config.yaml" />
   <xacro:property name="dict_yaml" value="${xacro.load_yaml(yaml_path)}" />
 
   <!-- lidar parameters -->
