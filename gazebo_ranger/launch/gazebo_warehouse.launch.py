@@ -157,7 +157,7 @@ def generate_launch_description():
         utm_pub,
         fake_local_path,
         state_machine,
-        rviz_node,
+        # rviz_node,
         laser_scan_node
     ])
 
