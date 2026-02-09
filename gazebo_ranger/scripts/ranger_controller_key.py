@@ -39,6 +39,7 @@ class Commander(Node):
         vel_msg.linear.x = msg.linear.x
         vel_msg.linear.y = msg.linear.y
         vel_msg.angular.z = -msg.angular.z
+        # Store the latest command - it will be used in timer_callback
         
     def timer_callback(self):
         if(vel_msg.linear.x == 0.0 and vel_msg.linear.y == 0.0 and vel_msg.angular.z == 0.0):
@@ -133,16 +134,18 @@ class Commander(Node):
             self.vel[3] = self.vel[1]
 
         else:
-
+            # All velocities are zero - stop the robot
             self.pos[:] = 0
             self.vel[:] = 0
 
-        pos_array = Float64MultiArray(data=self.pos) 
-        vel_array = Float64MultiArray(data=self.vel) 
+        # Publish commands
+        pos_array = Float64MultiArray(data=self.pos.copy()) 
+        vel_array = Float64MultiArray(data=self.vel.copy()) 
         self.pub_pos.publish(pos_array)
         self.pub_vel.publish(vel_array)
-        self.pos[:] = 0
-        self.vel[:] = 0
+        
+        # Note: Do NOT reset pos/vel here - they need to persist for the next iteration
+        # The values will be recalculated in the next timer callback based on vel_msg
 
 def main(args=None):
     rclpy.init(args=args)

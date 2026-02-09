@@ -5,7 +5,7 @@ from os.path import join
 from ament_index_python.packages import get_package_share_directory
 import xacro
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable, ExecuteProcess
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable, ExecuteProcess, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
@@ -58,17 +58,36 @@ def generate_launch_description():
         ]
     )
     
-    # Load controllers
-    forward_position_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'forward_position_controller']
+    # Load controllers after robot is spawned
+    # Use TimerAction to wait for controller_manager to be ready
+    load_joint_state_broadcaster = TimerAction(
+        period=3.0,
+        actions=[
+            ExecuteProcess(
+                cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'joint_state_broadcaster'],
+                output='screen'
+            )
+        ]
     )
-
-    forward_velocity_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'forward_velocity_controller']
+    
+    load_forward_position_controller = TimerAction(
+        period=3.5,
+        actions=[
+            ExecuteProcess(
+                cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'forward_position_controller'],
+                output='screen'
+            )
+        ]
     )
-
-    joint_state_broadcaster = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'joint_state_broadcaster']
+    
+    load_forward_velocity_controller = TimerAction(
+        period=4.0,
+        actions=[
+            ExecuteProcess(
+                cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'forward_velocity_controller'],
+                output='screen'
+            )
+        ]
     )
     
     # Ranger controller key - converts cmd_vel to controller commands
@@ -129,9 +148,9 @@ def generate_launch_description():
         gazebo,
         robot_state_publisher,
         spawn_ranger,
-        forward_position_controller,
-        forward_velocity_controller,
-        joint_state_broadcaster,
+        load_joint_state_broadcaster,
+        load_forward_position_controller,
+        load_forward_velocity_controller,
         ranger_controller_key,
         # rviz_node,
         laser_scan_node,

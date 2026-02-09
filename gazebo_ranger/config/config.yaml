@@ -1,46 +1,5 @@
-# Gazebo Ranger 통합 설정 파일
-
-# ========== Controller 설정 ==========
-controller_manager:
-  ros__parameters:
-    update_rate: 1000  # Hz
-
-    joint_state_broadcaster:
-      type: joint_state_broadcaster/JointStateBroadcaster
-
-    forward_position_controller:
-      type: forward_command_controller/ForwardCommandController
-
-    forward_velocity_controller:
-      type: forward_command_controller/ForwardCommandController
-
-forward_position_controller:
-  ros__parameters:
-    joints:
-      - fl_steering_wheel
-      - fr_steering_wheel
-      - rl_steering_wheel
-      - rr_steering_wheel
-    interface_name: position
-    command_interfaces:
-      - position
-    state_interfaces:
-      - position
-      - velocity
-
-forward_velocity_controller:
-  ros__parameters:
-    joints:
-      - fl_wheel
-      - fr_wheel
-      - rl_wheel
-      - rr_wheel
-    interface_name: velocity
-    command_interfaces:
-      - velocity
-    state_interfaces:
-      - position
-      - velocity
+# Gazebo Ranger Sensor 및 LaserScan 설정 파일
+# 주의: 이 파일은 URDF xacro에서 사용되며, ROS2 파라미터 형식이 아닙니다.
 
 # ========== Sensor 설정 ==========
 camera:

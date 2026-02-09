@@ -58,13 +58,13 @@ Visualization Manager:
         camera_link:
           Value: true
         fl_steering_wheel_link:
-          Value: false
+          Value: true
         fl_wheel_link:
-          Value: false
+          Value: true
         fr_steering_wheel_link:
-          Value: false
+          Value: true
         fr_wheel_link:
-          Value: false
+          Value: true
         gps2_link_connect:
           Value: false
         gps_link_connect:
@@ -88,51 +88,52 @@ Visualization Manager:
         ranger_base:
           Value: false
         rl_steering_wheel_link:
-          Value: false
+          Value: true
         rl_wheel_link:
-          Value: false
+          Value: true
         rr_steering_wheel_link:
-          Value: false
+          Value: true
         rr_wheel_link:
-          Value: false
+          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: false
       Tree:
+        base_link:
+          fl_steering_wheel_link:
+            fl_wheel_link:
+              {}
+          fr_steering_wheel_link:
+            fr_wheel_link:
+              {}
+          gps2_link_connect:
+            {}
+          gps_link_connect:
+            {}
+          imu:
+            {}
+          kinect_camera:
+            kinect_camera_optical:
+              {}
+          ranger_base:
+            camera_link:
+              {}
+            imu_link:
+              {}
+            lidar_connector_link:
+              ouster_base_link:
+                ouster:
+                  {}
+          rl_steering_wheel_link:
+            rl_wheel_link:
+              {}
+          rr_steering_wheel_link:
+            rr_wheel_link:
+              {}
         odom:
-          base_link:
-            fl_steering_wheel_link:
-              fl_wheel_link:
-                {}
-            fr_steering_wheel_link:
-              fr_wheel_link:
-                {}
-            gps2_link_connect:
-              {}
-            gps_link_connect:
-              {}
-            imu:
-              {}
-            kinect_camera:
-              kinect_camera_optical:
-                {}
-            ranger_base:
-              camera_link:
-                {}
-              imu_link:
-                {}
-              lidar_connector_link:
-                ouster_base_link:
-                  ouster:
-                    {}
-            rl_steering_wheel_link:
-              rl_wheel_link:
-                {}
-            rr_steering_wheel_link:
-              rr_wheel_link:
-                {}
+          {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -457,16 +458,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 3.3345298767089844
+      Distance: 18.538002014160156
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.7657691836357117
-        Y: -0.020097240805625916
-        Z: -0.06012444570660591
+        X: 1.3613929748535156
+        Y: -1.3703603744506836
+        Z: 0.14036467671394348
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
